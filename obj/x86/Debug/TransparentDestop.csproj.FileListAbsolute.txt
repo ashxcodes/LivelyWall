@@ -1,0 +1,15 @@
+C:\WORK\LiveWallpaper\TransparentDestop\bin\x86\Debug\TransparentDestop.exe.config
+C:\WORK\LiveWallpaper\TransparentDestop\bin\x86\Debug\TransparentDestop.exe
+C:\WORK\LiveWallpaper\TransparentDestop\bin\x86\Debug\TransparentDestop.pdb
+C:\WORK\LiveWallpaper\TransparentDestop\bin\x86\Debug\Interop.WMPLib.dll
+C:\WORK\LiveWallpaper\TransparentDestop\bin\x86\Debug\AxInterop.WMPLib.dll
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.csproj.AssemblyReference.cache
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\Interop.WMPLib.dll
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\AxInterop.WMPLib.dll
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.csproj.ResolveComReference.cache
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.Form1.resources
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.Properties.Resources.resources
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.csproj.GenerateResource.cache
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.csproj.CoreCompileInputs.cache
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.exe
+C:\WORK\LiveWallpaper\TransparentDestop\obj\x86\Debug\TransparentDestop.pdb
