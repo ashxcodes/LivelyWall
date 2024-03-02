@@ -50,21 +50,20 @@ namespace LivelyWall
             this.FormBorderStyle = FormBorderStyle.None;
             this.Opacity = 1;
 
-            Rectangle workingArea = Screen.FromControl(this).WorkingArea;
-            int widthWithoutTaskbar = workingArea.Width;
-            int heightWithoutTaskbar = workingArea.Height;
+            Rectangle screen = Screen.PrimaryScreen.Bounds;
+            int widthWithoutTaskbar = screen.Width;
+            int heightWithoutTaskbar = screen.Height;
 
             this.Size = new Size(widthWithoutTaskbar, heightWithoutTaskbar);
             // Set the location of the form to the top-left corner of the working area
-            this.Location = new Point(workingArea.Left, workingArea.Top);
+            this.Location = new Point(screen.Left, screen.Top);
         }
 
         private void InitializeMediaPlayer()
         {
-            axWindowsMediaPlayer1.Dock = DockStyle.Fill;
             axWindowsMediaPlayer1.Size = this.Size;
             axWindowsMediaPlayer1.uiMode = "none"; // Hide the player controls
-            axWindowsMediaPlayer1.URL = @"D:/LiveWallpapers/black-background-with-goku-dragon-ball-z.1920x1080.mp4"; // Path to your video file
+            axWindowsMediaPlayer1.URL = @"D:/LiveWallpapers/nissan-gt-r35-liberty-walk-moewalls-com.mp4"; // Path to your video file
             axWindowsMediaPlayer1.settings.autoStart = true; // Start playing automatically
             axWindowsMediaPlayer1.stretchToFit = true;
             axWindowsMediaPlayer1.settings.setMode("loop", true);
