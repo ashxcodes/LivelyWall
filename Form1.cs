@@ -7,7 +7,8 @@ namespace TransparentDestop
 {
     public partial class Form1 : Form
     {
-        private Timer timer1 = new Timer();
+        private Timer timer;
+
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
@@ -36,6 +37,7 @@ namespace TransparentDestop
             base.OnLoad(e);
             FindTheWindowAndReparent();
             InitializeMediaPlayer();
+            InitializeTimer();
         }
 
         public void SetDefaultWallpaper()
@@ -60,13 +62,14 @@ namespace TransparentDestop
         private void InitializeMediaPlayer()
         {
             axWindowsMediaPlayer1.Dock = DockStyle.Fill;
-            axWindowsMediaPlayer1.Size = this.Size; 
+            axWindowsMediaPlayer1.Size = this.Size;
             axWindowsMediaPlayer1.uiMode = "none"; // Hide the player controls
             axWindowsMediaPlayer1.URL = @"D:/LiveWallpapers/black-background-with-goku-dragon-ball-z.1920x1080.mp4"; // Path to your video file
             axWindowsMediaPlayer1.settings.autoStart = true; // Start playing automatically
             axWindowsMediaPlayer1.stretchToFit = true;
             axWindowsMediaPlayer1.settings.setMode("loop", true);
         }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (axWindowsMediaPlayer1.Ctlcontrols.currentPosition > axWindowsMediaPlayer1.Ctlcontrols.currentItem.duration - 0.01)
@@ -105,13 +108,18 @@ namespace TransparentDestop
             }
         }
 
+        private void InitializeTimer()
+        {
+            timer = new Timer();
+            timer.Start();
+            timer.Tick += timer1_Tick;
+        }
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
         private const int SPI_SETDESKWALLPAPER = 20;
         private const int SPIF_UPDATEINIFILE = 0x01;
         private const int SPIF_SENDCHANGE = 0x02;
-
-        public FormClosingEventHandler Form1_FormClosing { get; }
 
         private void SetWallpaper(string imagePath)
         {
