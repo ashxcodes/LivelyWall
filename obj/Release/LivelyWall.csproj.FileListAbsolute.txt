@@ -1,0 +1,15 @@
+C:\Users\Abdullah\source\repos\LivelyWall\bin\Release\LivelyWall.exe.config
+C:\Users\Abdullah\source\repos\LivelyWall\bin\Release\LivelyWall.exe
+C:\Users\Abdullah\source\repos\LivelyWall\bin\Release\LivelyWall.pdb
+C:\Users\Abdullah\source\repos\LivelyWall\bin\Release\Interop.WMPLib.dll
+C:\Users\Abdullah\source\repos\LivelyWall\bin\Release\AxInterop.WMPLib.dll
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.csproj.AssemblyReference.cache
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\Interop.WMPLib.dll
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\AxInterop.WMPLib.dll
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.csproj.ResolveComReference.cache
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.Form1.resources
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.Properties.Resources.resources
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.csproj.GenerateResource.cache
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.csproj.CoreCompileInputs.cache
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.exe
+C:\Users\Abdullah\source\repos\LivelyWall\obj\Release\LivelyWall.pdb

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace TransparentDestop
+namespace LivelyWall
 {
     internal static class Program
     {
