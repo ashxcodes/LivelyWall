@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TransparentDestop")]
+[assembly: AssemblyTitle("LivelyWall")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CureMD")]
-[assembly: AssemblyProduct("TransparentDestop")]
+[assembly: AssemblyProduct("LivelyWall")]
 [assembly: AssemblyCopyright("Copyright © CureMD 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

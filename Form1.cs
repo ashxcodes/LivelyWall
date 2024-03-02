@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System;
 
-namespace TransparentDestop
+namespace LivelyWall
 {
     public partial class Form1 : Form
     {

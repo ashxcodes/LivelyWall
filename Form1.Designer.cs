@@ -1,4 +1,4 @@
-﻿namespace TransparentDestop
+﻿namespace LivelyWall
 {
     partial class Form1
     {
