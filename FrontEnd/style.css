@@ -1,36 +1,56 @@
 body {
-    background-color: #f5f5f5; /* Mild color background */
-    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
     text-align: center;
     padding: 20px;
+    margin: 0;
 }
 
-#selectButton {
-    background-color: #3498db; /* Button color */
-    color: #ffffff; /* Text color */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#selectButton, #setButton {
+    background-color: #3498db;
+    color: #ffffff;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
     cursor: pointer;
+    margin-top: 10px;
 }
 
-#setButton {
-    background-color: #3498db; /* Button color */
-    color: #ffffff; /* Text color */
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-#setButton:hover {
-    background-color: #2980b9; /* Button color on hover */
-}
-#selectButton:hover {
-    background-color: #2980b9; /* Button color on hover */
+#selectButton:hover, #setButton:hover {
+    background-color: #2980b9;
 }
 
 #textField {
     padding: 10px;
     font-size: 16px;
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in element's total width */
+    margin-top: 10px;
+}
+
+#dropArea {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+
+}
+
+@media only screen and (min-width: 600px) {
+    /* Adjust styles for larger screens if needed */
+    .container {
+        max-width: 600px; /* Limit the width for larger screens */
+        margin: 0 auto; /* Center the container horizontally */
+    }
 }

@@ -9,6 +9,9 @@
 </head>
 <body>
     <h1>Welcome to LivelyWall</h1>
+    <div id="dropArea" ondrop="handleDrop(event)" ondragover="allowDrop(event)" onclick="selectButtonClick()">
+        <p>Drag and drop files here or click to select</p>
+    </div>
     <input readonly type="text" id="textField" placeholder="Select Your Wallpaper...">
     <button onclick="selectButtonClick()" id="selectButton">Select</button>
     <button onclick="setButtonClick()" id="setButton">Set Wallpaper</button>

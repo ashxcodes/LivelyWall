@@ -36,10 +36,14 @@ namespace LivelyWall
         }
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
-            FindTheWindowAndReparent();
-            InitializeMediaPlayer();
-            InitializeTimer();
+            if (filePath != null && filePath != "")
+            {
+                base.OnLoad(e);
+                FindTheWindowAndReparent();
+                InitializeMediaPlayer();
+                InitializeTimer();
+            }
+
         }
 
         public void SetDefaultWallpaper()

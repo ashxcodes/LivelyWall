@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
@@ -10,24 +11,36 @@ namespace LivelyWall
     public partial class HomePage : Form
     {
         private readonly OpenFileDialog openFileDialog = new OpenFileDialog();
-        private bool dataSent;
+        private string filepath;
+
         public HomePage()
         {
             InitializeComponent();
-            InitWebView();
+            InitializeWebView();
             InitializeComponentFormProperties();
+            InitializeDragArea();
         }
-        private async void InitWebView()
+        
+        private async void InitializeWebView()
         {
             await webView1.EnsureCoreWebView2Async();
             webView1.CoreWebView2.Navigate("C:\\Users\\Abdullah\\source\\repos\\LivelyWall\\FrontEnd\\index.html");
             webView1.WebMessageReceived += WebView_ScriptNotify;
         }
+        
         private void InitializeComponentFormProperties()
         {
             this.ShowInTaskbar = false;
-            this.MaximizeBox = false; 
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
         }
+        
+        private void InitializeDragArea()
+        {
+            this.AllowDrop = true;
+            this.DragEnter += DragArea_DragEnter;
+        }
+        
         private void WebView_ScriptNotify(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
             if (int.TryParse(e.WebMessageAsJson, out int message))
@@ -44,11 +57,17 @@ namespace LivelyWall
                         openFileDialog.Filter = "Video files|*.mp4;*.avi;*.mkv;*.mov|All files (*.*)|*.*";
                         openFileDialog.CheckFileExists = true;
                         openFileDialog.ShowDialog();
-                        SendFileNameToWebView(openFileDialog.FileName);
+                        this.filepath = openFileDialog.FileName;
+                        SendFileNameToWebView(this.filepath);
                         break;
 
                     case (int)Messages.SetBtnClick:
-                        Form1 form = new Form1(openFileDialog.FileName);
+                        if (filepath == null || filepath == "")
+                        {
+                            MessageBox.Show("File Not found");
+                            return;
+                        }
+                        Form1 form = new Form1(filepath);
                         form.Show();
                         break;
 
@@ -57,6 +76,7 @@ namespace LivelyWall
                 }
             }
         }
+
         private async void SendFileNameToWebView(string data)
         {
             if (webView1 != null && webView1.CoreWebView2 != null)
@@ -65,6 +85,37 @@ namespace LivelyWall
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
+
+        private void DragArea_DragEnter(object sender, DragEventArgs e)
+        {
+            // Check if the data format is FileDrop
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                this.filepath = files[0];
+                return;
+            }
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+
+            if (e.Button == MouseButtons.Left)
+            {
+                // Toggle the visibility of the form
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    Show();
+                    WindowState = FormWindowState.Normal;
+                }
+                else
+                {
+                    WindowState = FormWindowState.Minimized;
+                    Hide();
+                }
+            }
+        }
+
     }
     enum Messages
     {
