@@ -8,6 +8,7 @@ namespace LivelyWall
     public partial class Form1 : Form
     {
         private Timer timer;
+        private string filePath;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -27,8 +28,9 @@ namespace LivelyWall
 
         delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
-        public Form1()
+        public Form1(string filePath)
         {
+            this.filePath = filePath;
             InitializeComponent();
             InitializeTransparentFormProperties();
         }
@@ -63,7 +65,7 @@ namespace LivelyWall
         {
             axWindowsMediaPlayer1.Size = this.Size;
             axWindowsMediaPlayer1.uiMode = "none"; // Hide the player controls
-            axWindowsMediaPlayer1.URL = @"D:/LiveWallpapers/nissan-gt-r35-liberty-walk-moewalls-com.mp4"; // Path to your video file
+            axWindowsMediaPlayer1.URL = filePath; // Path to your video file
             axWindowsMediaPlayer1.settings.autoStart = true; // Start playing automatically
             axWindowsMediaPlayer1.stretchToFit = true;
             axWindowsMediaPlayer1.settings.setMode("loop", true);

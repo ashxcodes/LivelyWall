@@ -1,0 +1,36 @@
+body {
+    background-color: #f5f5f5; /* Mild color background */
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+#selectButton {
+    background-color: #3498db; /* Button color */
+    color: #ffffff; /* Text color */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+#setButton {
+    background-color: #3498db; /* Button color */
+    color: #ffffff; /* Text color */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+#setButton:hover {
+    background-color: #2980b9; /* Button color on hover */
+}
+#selectButton:hover {
+    background-color: #2980b9; /* Button color on hover */
+}
+
+#textField {
+    padding: 10px;
+    font-size: 16px;
+}
