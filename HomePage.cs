@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.IO;
+using System;
+using System.Windows.Forms;
 
 
 namespace LivelyWall
@@ -19,7 +21,8 @@ namespace LivelyWall
         private async void InitializeWebView()
         {
             await webView1.EnsureCoreWebView2Async();
-            webView1.CoreWebView2.Navigate("C:\\Users\\Abdullah\\source\\repos\\LivelyWall\\FrontEnd\\index.html");
+            string htmlPath = Path.Combine(Application.StartupPath, "FrontEnd", "index.html");
+            webView1.Source = new Uri(htmlPath);
             webView1.WebMessageReceived += WebView_ScriptNotify;
         }
 
