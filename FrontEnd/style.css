@@ -28,10 +28,10 @@ body {
     cursor: pointer;
     width: 80%;
     box-sizing: border-box;
-    margin: 0 auto 20px; /* Add margin at the bottom to separate from the next element */
+    margin: 0 auto 20px;
     color: #ffffff;
     background-color: #333333;
-    border-radius: 10px; /* Add rounded corners for a softer look */
+    border-radius: 10px;
 }
 
 #textField {
@@ -41,14 +41,15 @@ body {
     box-sizing: border-box;
     margin-top: 10px;
     color: #000000;
+    border-radius: 5px;
     background-color: #ffffff;
-    border: 1px solid #ccc; /* Add a subtle border for better visibility */
+    border: 1px solid #ccc;
 }
 
 .buttonContainer {
     display: flex;
     flex-direction: row;
-    color: #4b4745;
+    color: #ffffff; /* Text color for buttons */
     width: 80%;
     align-items: center;
     justify-content: center;
@@ -57,6 +58,7 @@ body {
 .button {
     padding: 10px 20px;
     font-size: 16px;
+    align-items: center;
     justify-content: center;
     border: none;
     cursor: pointer;
@@ -68,15 +70,15 @@ body {
 
 .button:not(:last-child) {
     margin-right: 15px;
-} 
+}
 
 #selectbutton,
 #setbutton {
-    background-color: #33d4b9;
+    background-color: #5a8a75; /* Greenish color */
 }
 
 #stopbutton {
-    background-color: #ac3232;
+    background-color: #af5d5d; /* Reddish color */
 }
 
 #stopbutton:hover {
@@ -85,7 +87,38 @@ body {
 
 #selectbutton:hover,
 #setbutton:hover {
-    background-color: #abf0e4;
+    background-color: #719e92; /* Lighter greenish color */
+}
+
+/* Snackbar */
+#snackbar {
+    visibility: hidden;
+    min-width: 200px;
+    background-color: #444; /* Darker color for snackbar */
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 8px 2px;
+    position: fixed;
+    z-index: 1;
+    right: 30px;
+    top: 30px;
+    font-size: 12px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.75s 2.0s;
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 
 @media only screen and (min-width: 600px) {
