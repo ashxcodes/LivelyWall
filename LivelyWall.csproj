@@ -56,8 +56,10 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>l-icon-28.ico</ApplicationIcon>
+    <ApplicationIcon>LivelyWall Logo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -149,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="l-icon-28.ico" />
+    <Content Include="LivelyWall Logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2">

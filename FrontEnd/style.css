@@ -1,9 +1,16 @@
 body {
-    background-color: #f5f5f5;
+    background-color: #1e1e1e;
+    color: #ffffff;
     font-family: 'Arial', sans-serif;
     text-align: center;
     padding: 20px;
     margin: 0;
+}
+
+.center {
+    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .container {
@@ -14,43 +21,76 @@ body {
     height: 100vh;
 }
 
-#selectButton, #setButton {
-    background-color: #3498db;
-    color: #ffffff;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#selectButton:hover, #setButton:hover {
-    background-color: #2980b9;
-}
-
-#textField {
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box; /* Include padding and border in element's total width */
-    margin-top: 10px;
-}
-
 #dropArea {
     border: 2px dashed #ccc;
     padding: 20px;
     text-align: center;
     cursor: pointer;
-    width: 100%;
+    width: 80%;
     box-sizing: border-box;
-    margin-top: 20px;
+    margin: 0 auto 20px; /* Add margin at the bottom to separate from the next element */
+    color: #ffffff;
+    background-color: #333333;
+    border-radius: 10px; /* Add rounded corners for a softer look */
+}
 
+#textField {
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid #ccc; /* Add a subtle border for better visibility */
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    color: #4b4745;
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.button:not(:last-child) {
+    margin-right: 15px;
+} 
+
+#selectbutton,
+#setbutton {
+    background-color: #33d4b9;
+}
+
+#stopbutton {
+    background-color: #ac3232;
+}
+
+#stopbutton:hover {
+    background-color: #e65531;
+}
+
+#selectbutton:hover,
+#setbutton:hover {
+    background-color: #abf0e4;
 }
 
 @media only screen and (min-width: 600px) {
-    /* Adjust styles for larger screens if needed */
     .container {
-        max-width: 600px; /* Limit the width for larger screens */
-        margin: 0 auto; /* Center the container horizontally */
+        max-width: 600px;
+        margin: 0 auto;
     }
 }

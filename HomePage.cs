@@ -1,15 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.WinForms;
+﻿using System.Windows.Forms;
 
 
 namespace LivelyWall
 {
     public partial class HomePage : Form
     {
+        private Form1 Form1 { get; set; }
         private readonly OpenFileDialog openFileDialog = new OpenFileDialog();
         private string filepath;
 
@@ -18,29 +14,27 @@ namespace LivelyWall
             InitializeComponent();
             InitializeWebView();
             InitializeComponentFormProperties();
-            InitializeDragArea();
         }
-        
+
         private async void InitializeWebView()
         {
             await webView1.EnsureCoreWebView2Async();
             webView1.CoreWebView2.Navigate("C:\\Users\\Abdullah\\source\\repos\\LivelyWall\\FrontEnd\\index.html");
             webView1.WebMessageReceived += WebView_ScriptNotify;
         }
-        
+
         private void InitializeComponentFormProperties()
         {
+            
             this.ShowInTaskbar = false;
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-        }
-        
-        private void InitializeDragArea()
-        {
             this.AllowDrop = true;
-            this.DragEnter += DragArea_DragEnter;
+            this.DragOver += DragArea_DragOver;
+            this.FormClosing += new FormClosingEventHandler(this.Prevent_FormClosing);
+
         }
-        
+
         private void WebView_ScriptNotify(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
             if (int.TryParse(e.WebMessageAsJson, out int message))
@@ -64,13 +58,21 @@ namespace LivelyWall
                     case (int)Messages.SetBtnClick:
                         if (filepath == null || filepath == "")
                         {
-                            MessageBox.Show("File Not found");
+                            MessageBox.Show("File Not found","Error");
                             return;
                         }
-                        Form1 form = new Form1(filepath);
-                        form.Show();
+                        Form1 = new Form1(filepath);
+                        Form1.Show();
+                        SendEventToWebView("SetButton", "Success");
                         break;
 
+                    case (int)Messages.StopBtnClick:
+                        Form1.SetDefaultWallpaper();
+                        Form1.Close();
+                        this.filepath = null;
+                        SendEventToWebView("StopButton", "Success");
+                        break;
+                        
                     default:
                         return;
                 }
@@ -85,12 +87,21 @@ namespace LivelyWall
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
+        private async void SendEventToWebView(string data, string type)
+        {
+            if (webView1 != null && webView1.CoreWebView2 != null)
+            {
+                string script = $"successEvent('{data}','{type}');";
+                await webView1.CoreWebView2.ExecuteScriptAsync(script);
+            }
+        }
 
-        private void DragArea_DragEnter(object sender, DragEventArgs e)
+        private void DragArea_DragOver(object sender, DragEventArgs e)
         {
             // Check if the data format is FileDrop
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
+                e.Data.GetDataPresent(DataFormats.FileDrop).GetType();
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 this.filepath = files[0];
                 return;
@@ -115,11 +126,21 @@ namespace LivelyWall
                 }
             }
         }
+        private void Prevent_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                WindowState = FormWindowState.Minimized;
+                Hide();
+            }
+        }
 
-    }
-    enum Messages
-    {
-        SelectBtnClick = 1,
-        SetBtnClick= 2
+        enum Messages
+        {
+            SelectBtnClick = 1,
+            SetBtnClick = 2,
+            StopBtnClick= 3
+        }
     }
 }

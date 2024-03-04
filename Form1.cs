@@ -9,6 +9,7 @@ namespace LivelyWall
     {
         private Timer timer;
         private string filePath;
+        private IntPtr originalParent;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -48,6 +49,8 @@ namespace LivelyWall
 
         public void SetDefaultWallpaper()
         {
+            timer.Stop(); 
+            axWindowsMediaPlayer1.close();
             SetWallpaper("C:/Windows/Web/Wallpaper/Windows/img0.jpg");
         }
 
@@ -130,7 +133,6 @@ namespace LivelyWall
         {
             SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, imagePath, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
         }
-
 
     }
 }
