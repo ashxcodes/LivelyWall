@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LivelyWall</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h1>Welcome to LivelyWall</h1>
+    <div id="dropArea" ondrop="handleDrop(event)" ondragover="allowDrop(event)" onclick="selectButtonClick()">
+        <p>Drag/Drop files or Click</p>
+    </div>
+    <input readonly type="text" id="textField" placeholder="Select Your Wallpaper...">
+    <div class="buttonContainer center">
+        <button class="button" onclick="selectButtonClick()" id="selectbutton">Select</button>
+        <button class="button" onclick="setButtonClick()" id="setbutton">Set Wallpaper</button>
+        <button class="button" onclick="stopButtonClick()" id="stopbutton">Stop Wallpaper</button>
+    </div>
+</body>
+</html>
