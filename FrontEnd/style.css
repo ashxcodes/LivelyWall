@@ -1,16 +1,22 @@
+:root {
+    --background-color-light: #ffffff;
+    --text-color-light: #000000;
+    --background-color-dark: #1e1e1e;
+    --text-color-dark: #ffffff;
+}
+
 body {
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background-color: var(--background-color-dark);
+    color: var(--text-color-dark);
     font-family: 'Arial', sans-serif;
     text-align: center;
     padding: 20px;
     margin: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .center {
     margin: auto;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .container {
@@ -29,8 +35,8 @@ body {
     width: 80%;
     box-sizing: border-box;
     margin: 0 auto 20px;
-    color: #ffffff;
-    background-color: #333333;
+    color: var(--text-color-light);
+    background-color: var(--background-color-dark);
     border-radius: 10px;
 }
 
@@ -40,16 +46,16 @@ body {
     width: 80%;
     box-sizing: border-box;
     margin-top: 10px;
-    color: #000000;
+    color: var(--text-color-light);
     border-radius: 5px;
-    background-color: #ffffff;
+    background-color: var(--background-color-light);
     border: 1px solid #ccc;
 }
 
 .buttonContainer {
     display: flex;
     flex-direction: row;
-    color: #ffffff; /* Text color for buttons */
+    color: var(--text-color-light);
     width: 80%;
     align-items: center;
     justify-content: center;
@@ -74,11 +80,11 @@ body {
 
 #selectbutton,
 #setbutton {
-    background-color: #5a8a75; /* Greenish color */
+    background-color: #5a8a75;
 }
 
 #stopbutton {
-    background-color: #af5d5d; /* Reddish color */
+    background-color: #af5d5d;
 }
 
 #stopbutton:hover {
@@ -87,21 +93,21 @@ body {
 
 #selectbutton:hover,
 #setbutton:hover {
-    background-color: #719e92; /* Lighter greenish color */
+    background-color: #719e92;
 }
 
-.placeholder-text{
-display: flex;
-align-items: flex-start;
-padding: 3px;
-width: 80%;
+.placeholder-text {
+    display: flex;
+    align-items: flex-start;
+    padding: 3px;
+    width: 80%;
 }
 
 /* Snackbar */
 #snackbar {
     visibility: hidden;
     min-width: 200px;
-    background-color: #444; /* Darker color for snackbar */
+    background-color: #444;
     color: #fff;
     text-align: center;
     border-radius: 8px;
@@ -118,14 +124,82 @@ width: 80%;
     animation: fadein 0.5s, fadeout 0.75s 2.0s;
 }
 
+.speed-container {
+    margin-top: 10px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+#speedField {
+    width: 60px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+/* Toggle button styles */
+.toggle-container {
+    position: fixed;
+    right: 10px;
+    margin-right: 12%;
+    display: inline-block;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-label {
+    display: block;
+    width: 20px; /* Adjust the width as needed */
+    height: 10px; /* Adjust the height as needed */
+    background-color: #ccc;
+    border-radius: 6px; /* Half of the height for round corners */
+    position: relative;
+    cursor: pointer;
+}
+
+.toggle-label:before {
+    content: '';
+    display: block;
+    width: 10px; /* Adjust the width as needed (considering round corners) */
+    height: 10px; /* Adjust the height as needed (considering round corners) */
+    background-color: #fff; /* Round button color */
+    border-radius: 50%; /* Make it a circle */
+    position: absolute;
+    transition: transform 0.3s ease;
+}
+
+.toggle-input:checked + .toggle-label:before {
+    transform: translateX(10px); /* Adjust the distance to move */
+}
+
+
+
 @keyframes fadein {
-    from {top: 0; opacity: 0;}
-    to {top: 30px; opacity: 1;}
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 30px;
+        opacity: 1;
+    }
 }
 
 @keyframes fadeout {
-    from {top: 30px; opacity: 1;}
-    to {top: 0; opacity: 0;}
+    from {
+        top: 30px;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
 }
 
 @media only screen and (min-width: 600px) {
