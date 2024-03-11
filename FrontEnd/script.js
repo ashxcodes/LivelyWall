@@ -1,5 +1,5 @@
 function selectButtonClick() {
-    window.chrome.webview.postMessage();
+    window.chrome.webview.postMessage(1);
 }
 
 function setButtonClick() {
