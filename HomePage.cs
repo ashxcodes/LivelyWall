@@ -10,6 +10,8 @@ namespace LivelyWall
         private Form1 Form1 { get; set; }
         private readonly OpenFileDialog openFileDialog = new OpenFileDialog();
         private string filepath;
+        private double playback;
+        private ConfigManager configManager = new ConfigManager();
 
         public HomePage()
         {
@@ -51,6 +53,12 @@ namespace LivelyWall
                     return;
                 }
 
+                if (message >= 0.25 && message <= 2)
+                {
+                    this.playback = message;
+                    return;
+                }
+
                 switch (message)
                 {
                     case (int)Messages.SelectBtnClick:
@@ -58,7 +66,7 @@ namespace LivelyWall
                         openFileDialog.CheckFileExists = true;
                         openFileDialog.ShowDialog();
                         this.filepath = openFileDialog.FileName;
-                        SendFileNameToWebView(this.filepath);
+                        SendDataToWebView(this.filepath);
                     break;
 
                     case (int)Messages.SetBtnClick:
@@ -67,10 +75,11 @@ namespace LivelyWall
                             MessageBox.Show("File Not found","Error");
                             return;
                         }
-                        Form1 = new Form1(filepath);
+                        Form1 = new Form1(filepath, playback);
                         Form1.Show();
                         SendEventToWebView("SetButton", "Success");
-                    break;
+                        configManager.SaveConfig(this.filepath);
+                        break;
 
                     case (int)Messages.StopBtnClick:
                         Form1?.Close();
@@ -84,11 +93,11 @@ namespace LivelyWall
             }
         }
 
-        private async void SendFileNameToWebView(string data)
+        private async void SendDataToWebView(string data)
         {
             if (webView1 != null && webView1.CoreWebView2 != null)
             {
-                string script = $"recieveFileNameFromForm('{data}');";
+                string script = $"recieveDataFromForm('{data}');";
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
@@ -143,9 +152,9 @@ namespace LivelyWall
 
         enum Messages
         {
-            SelectBtnClick = 1,
-            SetBtnClick = 2,
-            StopBtnClick= 3
+            SelectBtnClick = 111,
+            SetBtnClick = 222,
+            StopBtnClick= 333
         }
 
         private void CodeCleanUp()

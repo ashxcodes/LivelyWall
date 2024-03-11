@@ -9,7 +9,8 @@ namespace LivelyWall
     {
         private readonly ScreenDetails screenDetails;
         private Timer timer;
-        private string filePath;
+        private readonly string filePath;
+        private readonly double playbackspeed;
         IntPtr result = IntPtr.Zero;
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -30,9 +31,10 @@ namespace LivelyWall
 
         delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
-        public Form1(string filePath)
+        public Form1(string filePath, double playbackspeed = 1.0)
         {
             this.filePath = filePath;
+            this.playbackspeed = playbackspeed;
             this.screenDetails = new ScreenDetails();
             InitializeComponent();
             InitializeTransparentFormProperties();
@@ -77,6 +79,7 @@ namespace LivelyWall
             axWindowsMediaPlayer1.URL = filePath; // Path to your video file
             axWindowsMediaPlayer1.settings.autoStart = true; // Start playing automatically
             axWindowsMediaPlayer1.stretchToFit = true;
+            axWindowsMediaPlayer1.settings.rate = this.playbackspeed;
             axWindowsMediaPlayer1.settings.setMode("loop", true);
         }
 
