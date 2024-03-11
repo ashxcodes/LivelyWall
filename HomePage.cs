@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System;
 using System.Windows.Forms;
 
@@ -28,11 +28,14 @@ namespace LivelyWall
 
         private void InitializeComponentFormProperties()
         {
-            
+
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Location = new System.Drawing.Point(0, 0);
             this.ShowInTaskbar = false;
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.AllowDrop = true;
+            this.notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             this.DragOver += DragArea_DragOver;
             this.FormClosing += new FormClosingEventHandler(this.Prevent_FormClosing);
 
@@ -56,7 +59,7 @@ namespace LivelyWall
                         openFileDialog.ShowDialog();
                         this.filepath = openFileDialog.FileName;
                         SendFileNameToWebView(this.filepath);
-                        break;
+                    break;
 
                     case (int)Messages.SetBtnClick:
                         if (filepath == null || filepath == "")
@@ -67,17 +70,16 @@ namespace LivelyWall
                         Form1 = new Form1(filepath);
                         Form1.Show();
                         SendEventToWebView("SetButton", "Success");
-                        break;
+                    break;
 
                     case (int)Messages.StopBtnClick:
-                        Form1.SetDefaultWallpaper();
-                        Form1.Close();
+                        Form1?.Close();
                         this.filepath = null;
                         SendEventToWebView("StopButton", "Success");
-                        break;
+                    break;
                         
                     default:
-                        return;
+                    return;
                 }
             }
         }
@@ -144,6 +146,22 @@ namespace LivelyWall
             SelectBtnClick = 1,
             SetBtnClick = 2,
             StopBtnClick= 3
+        }
+
+        private void CodeCleanUp()
+        {
+            Form1?.Close();
+        }
+
+        private void openStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CodeCleanUp();
+            Application.Exit();
         }
     }
 }

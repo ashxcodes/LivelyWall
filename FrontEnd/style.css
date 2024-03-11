@@ -90,6 +90,13 @@ body {
     background-color: #719e92; /* Lighter greenish color */
 }
 
+.placeholder-text{
+display: flex;
+align-items: flex-start;
+padding: 3px;
+width: 80%;
+}
+
 /* Snackbar */
 #snackbar {
     visibility: hidden;

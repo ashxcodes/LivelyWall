@@ -7,9 +7,10 @@ namespace LivelyWall
 {
     public partial class Form1 : Form
     {
+        private readonly ScreenDetails screenDetails;
         private Timer timer;
         private string filePath;
-        private IntPtr originalParent;
+        IntPtr result = IntPtr.Zero;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -32,6 +33,7 @@ namespace LivelyWall
         public Form1(string filePath)
         {
             this.filePath = filePath;
+            this.screenDetails = new ScreenDetails();
             InitializeComponent();
             InitializeTransparentFormProperties();
         }
@@ -46,11 +48,17 @@ namespace LivelyWall
             }
 
         }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            timer.Stop();
+            axWindowsMediaPlayer1.close();
+            DetachAndRestore();
+            SetDefaultWallpaper();
+        }
 
         public void SetDefaultWallpaper()
         {
-            timer.Stop(); 
-            axWindowsMediaPlayer1.close();
             SetWallpaper("C:/Windows/Web/Wallpaper/Windows/img0.jpg");
         }
 
@@ -58,14 +66,8 @@ namespace LivelyWall
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.Opacity = 1;
-
-            Rectangle screen = Screen.PrimaryScreen.Bounds;
-            int widthWithoutTaskbar = screen.Width;
-            int heightWithoutTaskbar = screen.Height;
-
-            this.Size = new Size(widthWithoutTaskbar, heightWithoutTaskbar);
-            // Set the location of the form to the top-left corner of the working area
-            this.Location = new Point(screen.Left, screen.Top);
+            this.Size = this.screenDetails.Dimensions();
+            this.Location = new Point(this.screenDetails.PrimaryScreen().Bounds.Left, this.screenDetails.PrimaryScreen().Bounds.Top);
         }
 
         private void InitializeMediaPlayer()
@@ -89,7 +91,6 @@ namespace LivelyWall
         private void FindTheWindowAndReparent()
         {
             IntPtr progman = FindWindow("Progman", null);
-            IntPtr result = IntPtr.Zero;
 
             // Send 0x052C to Progman to recreate the WorkerW windows
             SendMessage(progman, 0x052C, new IntPtr(0), new IntPtr(0));
@@ -114,7 +115,18 @@ namespace LivelyWall
                 // If you're in the Form's Load event, you can close the form. This will end the application if it's the main form.
                 this.Close();
             }
+
         }
+        private void DetachAndRestore()
+        {
+            // Assuming 'result' is the global IntPtr storing the handle to WorkerW
+            if (result != IntPtr.Zero)
+            {
+                // Attempt to detach the form by setting its parent to the default desktop window
+                SetParent(this.Handle, FindWindow("Progman", null));
+            }
+        }
+
 
         private void InitializeTimer()
         {
