@@ -1,14 +1,12 @@
 const SELECT_ACTION = 111;
 const SET_ACTION = 222;
 const STOP_ACTION = 333;
-const toggleButton = document.getElementById('toggle');
-toggleButton.addEventListener('change', toggleTheme);
-
 function selectButtonClick() {
     window.chrome.webview.postMessage(SELECT_ACTION);
 }
 
-function setButtonClick() {
+async function setButtonClick() {
+    await sendPlaybackSpeed();
     window.chrome.webview.postMessage(SET_ACTION);
 }
 
@@ -17,16 +15,20 @@ function stopButtonClick() {
     window.chrome.webview.postMessage(STOP_ACTION);
 }
 
-function recieveDataFromForm(data) {
+function recieveDataFromForm(encodedString) {
+    let data = '';
+    if (encodedString) {
+        data = atob(encodedString);
+    }
     if (document.getElementById("textField")) {
         document.getElementById("textField").value = data;
     }
 }
 
-function sendDataToForm(){
+async function sendPlaybackSpeed(){
     if (document.getElementById("speedField")) {
         const playback = Number(document.getElementById("speedField").value);
-        window.chrome.webview.postMessage(playback);
+        await window.chrome.webview.postMessage(playback);
     }
 }
 
@@ -72,11 +74,14 @@ function successEvent(btnName, event) {
             case "setbutton":
                 toggleButtonState("setbutton", false);
                 toggleButtonState("stopbutton", true);
+                document.getElementById("speedField").disabled = true;
                 break;
 
             case "stopbutton":
                 toggleButtonState("stopbutton", false);
-                toggleButtonState("setbutton", true);
+                toggleButtonState("setbutton", true);   
+                document.getElementById("textField").value = '';
+                document.getElementById("speedField").disabled = false;
                 break;
 
             default:
@@ -97,7 +102,7 @@ function showSnackbar(message, type) {
     snackbar.innerHTML = message;
     switch (type) {
         case "error":
-            snackbar.style.backgroundColor = '#ac3232'; // Red color for error
+            snackbar.style.backgroundColor = '#ac3232';
             break;
 
         case "success":
@@ -113,20 +118,4 @@ function showSnackbar(message, type) {
         snackbar.className = snackbar.className.replace("show", ""); 
         snackbar.style.backgroundColor = '';
     }, 2200);
-}
-
-function toggleTheme() {
-    const body = document.body;
-    const isDarkMode = body.classList.contains('dark-mode');
-
-    // Toggle classes and update CSS variables
-    if (isDarkMode) {
-        body.classList.remove('dark-mode');
-        body.style.backgroundColor = getComputedStyle(document.body).getPropertyValue('--background-color-light');
-        body.style.color = getComputedStyle(document.body).getPropertyValue('--text-color-light');
-    } else {
-        body.classList.add('dark-mode');
-        body.style.backgroundColor = getComputedStyle(document.body).getPropertyValue('--background-color-dark');
-        body.style.color = getComputedStyle(document.body).getPropertyValue('--text-color-dark');
-    }
 }
