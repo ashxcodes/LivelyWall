@@ -2,7 +2,6 @@ using System.IO;
 using System;
 using System.Windows.Forms;
 
-
 namespace LivelyWall
 {
     public partial class HomePage : Form
@@ -10,14 +9,15 @@ namespace LivelyWall
         private Form1 Form1 { get; set; }
         private readonly OpenFileDialog openFileDialog = new OpenFileDialog();
         private string filepath;
-        private double playback;
-        private ConfigManager configManager = new ConfigManager();
+        private double playback = 1;
+        private readonly ConfigManager configManager = new ConfigManager();
 
         public HomePage()
         {
             InitializeComponent();
             InitializeWebView();
-            InitializeComponentFormProperties();
+            InitializeFormProperties();
+            LoadUserConfig();
         }
 
         private async void InitializeWebView()
@@ -25,10 +25,10 @@ namespace LivelyWall
             await webView1.EnsureCoreWebView2Async();
             string htmlPath = Path.Combine(Application.StartupPath, "FrontEnd", "index.html");
             webView1.Source = new Uri(htmlPath);
-            webView1.WebMessageReceived += WebView_ScriptNotify;
+            webView1.WebMessageReceived += ReceiveMessageFromWebView;
         }
 
-        private void InitializeComponentFormProperties()
+        private void InitializeFormProperties()
         {
 
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -43,11 +43,10 @@ namespace LivelyWall
 
         }
 
-        private void WebView_ScriptNotify(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
+        private void ReceiveMessageFromWebView(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
             if (int.TryParse(e.WebMessageAsJson, out int message))
             {
-                // Check for the message sent from JavaScript
                 if (e.Source != webView1.CoreWebView2.Source)
                 {
                     return;
@@ -97,10 +96,12 @@ namespace LivelyWall
         {
             if (webView1 != null && webView1.CoreWebView2 != null)
             {
-                string script = $"recieveDataFromForm('{data}');";
+                string encodedString = Encoder.Encoder.EncodeTo64(data);
+                string script = $"recieveDataFromForm('{encodedString}');";
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
+
         private async void SendEventToWebView(string data, string type)
         {
             if (webView1 != null && webView1.CoreWebView2 != null)
@@ -108,6 +109,21 @@ namespace LivelyWall
                 string script = $"successEvent('{data}','{type}');";
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
+        }
+
+        private void LoadUserConfig()
+        {
+            UserConfig config = configManager.LoadConfig();
+            if (config.Paths.Count != 0)
+            {
+                Random rnd = new Random();
+                int index = rnd.Next(0, config.Paths.Count);
+                filepath = config.Paths[index];
+                Form1 = new Form1(filepath, playback);
+                Form1.Show();
+                SendEventToWebView("SetButton", "Success");
+            }
+
         }
 
         private void DragArea_DragOver(object sender, DragEventArgs e)
@@ -122,7 +138,7 @@ namespace LivelyWall
             }
         }
 
-        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        private void NotifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
 
             if (e.Button == MouseButtons.Left)
@@ -140,6 +156,7 @@ namespace LivelyWall
                 }
             }
         }
+
         private void Prevent_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -156,21 +173,16 @@ namespace LivelyWall
             SetBtnClick = 222,
             StopBtnClick= 333
         }
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CodeCleanUp();
+            Application.Exit();
+        }
 
         private void CodeCleanUp()
         {
             Form1?.Close();
         }
 
-        private void openStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CodeCleanUp();
-            Application.Exit();
-        }
     }
 }

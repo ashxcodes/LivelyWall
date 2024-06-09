@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -37,7 +36,6 @@ namespace LivelyWall
         {
             string directoryPath = Path.Combine(Application.StartupPath, "config");
 
-            // Ensure that the "config" folder exists
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);

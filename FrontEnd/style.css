@@ -103,6 +103,10 @@ body {
     width: 80%;
 }
 
+.dropArea{
+    color: #fff;
+}
+
 /* Snackbar */
 #snackbar {
     visibility: hidden;
@@ -208,3 +212,4 @@ label {
         margin: 0 auto;
     }
 }
+
