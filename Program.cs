@@ -13,7 +13,8 @@ namespace LivelyWall
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new HomePage());
+            new Controller.Controller(); 
+            Application.Run();
             Application.Exit();
         }
     }

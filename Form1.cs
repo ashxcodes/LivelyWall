@@ -8,10 +8,12 @@ namespace LivelyWall
     public partial class Form1 : Form
     {
         private readonly ScreenDetails screenDetails;
-        private Timer timer;
+        private System.Windows.Forms.Timer timer;
         private readonly string filePath;
         private readonly double playbackspeed;
         IntPtr result = IntPtr.Zero;
+        IntPtr progman = IntPtr.Zero;
+        IntPtr shelldll_defview = IntPtr.Zero;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -93,14 +95,14 @@ namespace LivelyWall
 
         private void FindTheWindowAndReparent()
         {
-            IntPtr progman = FindWindow("Progman", null);
+            this.progman = FindWindow("Progman", null);
 
             // Send 0x052C to Progman to recreate the WorkerW windows
             SendMessage(progman, 0x052C, new IntPtr(0), new IntPtr(0));
 
             EnumWindows(delegate (IntPtr wnd, IntPtr param)
             {
-                IntPtr shelldll_defview = FindWindowEx(wnd, IntPtr.Zero, "SHELLDLL_DefView", null);
+                shelldll_defview = FindWindowEx(wnd, IntPtr.Zero, "SHELLDLL_DefView", null);
                 if (shelldll_defview != IntPtr.Zero)
                 {
                     result = FindWindowEx(IntPtr.Zero, wnd, "WorkerW", null);
@@ -115,25 +117,22 @@ namespace LivelyWall
             else
             {
                 MessageBox.Show("Unable to find the desktop worker window. The application will now exit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // If you're in the Form's Load event, you can close the form. This will end the application if it's the main form.
                 this.Close();
+                this.Dispose();
             }
 
         }
         private void DetachAndRestore()
         {
-            // Assuming 'result' is the global IntPtr storing the handle to WorkerW
             if (result != IntPtr.Zero)
             {
-                // Attempt to detach the form by setting its parent to the default desktop window
-                SetParent(this.Handle, FindWindow("Progman", null));
+                SetParent(this.Handle, this.progman);
             }
         }
 
-
         private void InitializeTimer()
         {
-            timer = new Timer();
+            timer = new System.Windows.Forms.Timer();
             timer.Start();
             timer.Tick += timer1_Tick;
         }
