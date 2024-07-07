@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Encoder\Encoder.cs" />
+    <Compile Include="GetWorkerW\GetWorker.cs" />
     <Compile Include="UserConfig\ConfigManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

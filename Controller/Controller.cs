@@ -1,18 +1,66 @@
 ﻿using System;
+using System.Windows.Forms;
+using LivelyWall.GetWorkerW;
 
 namespace LivelyWall.Controller
 {
     public class Controller
     {
+        private static Controller instance;
+        private static readonly object padlock = new object();
+
+        public static Controller Instance
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new Controller();
+                    }
+                    return instance;
+                }
+            }
+        }
+
         private readonly ConfigManager configManager = new ConfigManager();
-        private Form1 Form1 { get; set; }
+        private Form1 Form1{ get; set; }
         private HomePage homePage {  get; set; }
-        private string filepath { get; set; }
-        private readonly double playback = 1;
+        private GetWorker WorkerW { get; set; }
 
         public Controller() 
         {
+            WorkerW = new GetWorker();
+            Form1 = new Form1("", 1);
             LoadUserConfig();
+        }
+        public void SetVideo()
+        {
+            WorkerW.SetVideo(Form1.Handle);
+            Form1?.StartVideo();
+            Form1?.Show();
+        }
+        public void ToggleHomePage()
+        {
+            if (homePage == null)
+            {
+                homePage = new HomePage(Form1);
+            }
+            if (homePage.WindowState == FormWindowState.Minimized)
+            {
+                homePage.Show();
+                homePage.WindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                homePage.WindowState = FormWindowState.Minimized;
+                homePage.Hide();
+            }
+        }
+        public void SetDefaultWallpaper()
+        {
+            WorkerW.SetDefaultWallpaper("C:/Windows/Web/Wallpaper/Windows/img0.jpg");
         }
         private void LoadUserConfig()
         {
@@ -21,12 +69,12 @@ namespace LivelyWall.Controller
             {
                 Random rnd = new Random();
                 int index = rnd.Next(0, config.Paths.Count);
-                filepath = config.Paths[index];
-                Form1 = new Form1(filepath, playback);
-                Form1.Show();
+                string filepath = config.Paths[index];
+                Form1.UpdateValues(filepath, 1);
+                SetVideo();
             } else
             {
-                homePage = new HomePage();
+                homePage = new HomePage(Form1);
             }
 
         }

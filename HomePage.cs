@@ -12,8 +12,9 @@ namespace LivelyWall
         private string filepath;
         private double playback = 1;
 
-        public HomePage()
+        public HomePage(Form1 Form1)
         {
+            this.Form1 = Form1;
             InitializeComponent();
             InitializeWebView();
             InitializeFormProperties();
@@ -36,7 +37,7 @@ namespace LivelyWall
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.AllowDrop = true;
-            this.notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+            //this.notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             this.DragOver += DragArea_DragOver;
             this.FormClosing += new FormClosingEventHandler(this.Prevent_FormClosing);
 
@@ -73,15 +74,15 @@ namespace LivelyWall
                             MessageBox.Show("File Not found","Error");
                             return;
                         }
-                        Form1 = new Form1(filepath, playback);
-                        Form1.Show();
+                        Form1.UpdateValues(filepath, playback);
+                        Controller.Controller.Instance.SetVideo();
                         SendEventToWebView("SetButton", "Success");
                         configManager.SaveConfig(this.filepath);
-                        break;
+                    break;
 
                     case (int)Messages.StopBtnClick:
-                        Form1?.Close();
-                        Form1?.Dispose();
+                        Form1?.StopVideo();
+                        Form1?.Hide();
                         this.filepath = null;
                         SendEventToWebView("StopButton", "Success");
                     break;
