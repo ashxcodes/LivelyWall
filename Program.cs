@@ -1,4 +1,4 @@
-﻿using LivelyWall.Controller;
+using LivelyWall.Controller;
 using System;
 using System.Windows.Forms;
 
