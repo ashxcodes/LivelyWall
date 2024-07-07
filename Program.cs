@@ -1,4 +1,5 @@
-﻿using System;
+using LivelyWall.Controller;
+using System;
 using System.Windows.Forms;
 
 namespace LivelyWall
@@ -11,10 +12,15 @@ namespace LivelyWall
         [STAThread]
         static void Main()
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new HomePage());
-            Application.Exit();
+            Controller.Controller controller = Controller.Controller.Instance;
+            Application.Run();
+        }
+        static void OnProcessExit(object sender, EventArgs e)
+        {
+            Controller.Controller.Instance.SetDefaultWallpaper();
         }
     }
 }

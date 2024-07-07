@@ -8,28 +8,9 @@ namespace LivelyWall
     public partial class Form1 : Form
     {
         private readonly ScreenDetails screenDetails;
-        private Timer timer;
-        private readonly string filePath;
-        private readonly double playbackspeed;
-        IntPtr result = IntPtr.Zero;
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
-
-        delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+        private System.Windows.Forms.Timer timer;
+        private string filePath;
+        private double playbackspeed;
 
         public Form1(string filePath, double playbackspeed = 1.0)
         {
@@ -38,30 +19,24 @@ namespace LivelyWall
             this.screenDetails = new ScreenDetails();
             InitializeComponent();
             InitializeTransparentFormProperties();
+            InitializeMediaPlayer();
+            InitializeTimer();
         }
-        protected override void OnLoad(EventArgs e)
-        {
-            if (filePath != null && filePath != "")
-            {
-                base.OnLoad(e);
-                FindTheWindowAndReparent();
-                InitializeMediaPlayer();
-                InitializeTimer();
-            }
-
-        }
+        //protected override void OnLoad(EventArgs e)
+        //{
+        //    if (filePath != null && filePath != "")
+        //    {
+        //        base.OnLoad(e);
+        //        //FindTheWindowAndReparent();
+        //        InitializeMediaPlayer();
+        //        InitializeTimer();
+        //    }
+        //}
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
             timer.Stop();
             axWindowsMediaPlayer1.close();
-            DetachAndRestore();
-            SetDefaultWallpaper();
-        }
-
-        public void SetDefaultWallpaper()
-        {
-            SetWallpaper("C:/Windows/Web/Wallpaper/Windows/img0.jpg");
         }
 
         private void InitializeTransparentFormProperties()
@@ -85,69 +60,49 @@ namespace LivelyWall
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (axWindowsMediaPlayer1.Ctlcontrols.currentPosition > axWindowsMediaPlayer1.Ctlcontrols.currentItem.duration - 0.01)
+            if (axWindowsMediaPlayer1.Ctlcontrols.currentItem != null && axWindowsMediaPlayer1.Ctlcontrols.currentPosition > axWindowsMediaPlayer1.Ctlcontrols.currentItem.duration - 0.01)
             {
                 axWindowsMediaPlayer1.Ctlcontrols.currentPosition = 0;
             }
         }
 
-        private void FindTheWindowAndReparent()
-        {
-            IntPtr progman = FindWindow("Progman", null);
-
-            // Send 0x052C to Progman to recreate the WorkerW windows
-            SendMessage(progman, 0x052C, new IntPtr(0), new IntPtr(0));
-
-            EnumWindows(delegate (IntPtr wnd, IntPtr param)
-            {
-                IntPtr shelldll_defview = FindWindowEx(wnd, IntPtr.Zero, "SHELLDLL_DefView", null);
-                if (shelldll_defview != IntPtr.Zero)
-                {
-                    result = FindWindowEx(IntPtr.Zero, wnd, "WorkerW", null);
-                }
-                return true;
-            }, IntPtr.Zero);
-
-            if (result != IntPtr.Zero)
-            {
-                SetParent(this.Handle, result);
-            }
-            else
-            {
-                MessageBox.Show("Unable to find the desktop worker window. The application will now exit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // If you're in the Form's Load event, you can close the form. This will end the application if it's the main form.
-                this.Close();
-            }
-
-        }
-        private void DetachAndRestore()
-        {
-            // Assuming 'result' is the global IntPtr storing the handle to WorkerW
-            if (result != IntPtr.Zero)
-            {
-                // Attempt to detach the form by setting its parent to the default desktop window
-                SetParent(this.Handle, FindWindow("Progman", null));
-            }
-        }
-
-
         private void InitializeTimer()
         {
-            timer = new Timer();
+            timer = new System.Windows.Forms.Timer();
             timer.Start();
             timer.Tick += timer1_Tick;
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-        private const int SPI_SETDESKWALLPAPER = 20;
-        private const int SPIF_UPDATEINIFILE = 0x01;
-        private const int SPIF_SENDCHANGE = 0x02;
-
-        private void SetWallpaper(string imagePath)
+        private void NotifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, imagePath, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+
+            if (e.Button == MouseButtons.Left)
+            {
+                Controller.Controller.Instance.ToggleHomePage();
+            }
         }
 
+        public void UpdateValues(string filepath, double playback)
+        {
+            this.filePath = filepath;
+            this.playbackspeed = playback;
+        }
+
+        public void StopVideo()
+        {
+            timer.Stop();
+            axWindowsMediaPlayer1.close();
+        }
+
+        public void StartVideo()
+        {
+            timer.Start();
+            axWindowsMediaPlayer1.URL = this.filePath;
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

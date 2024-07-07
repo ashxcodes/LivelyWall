@@ -6,18 +6,18 @@ namespace LivelyWall
 {
     public partial class HomePage : Form
     {
-        private Form1 Form1 { get; set; }
         private readonly OpenFileDialog openFileDialog = new OpenFileDialog();
+        private readonly ConfigManager configManager = new ConfigManager();
+        private Form1 Form1 { get; set; }
         private string filepath;
         private double playback = 1;
-        private readonly ConfigManager configManager = new ConfigManager();
 
-        public HomePage()
+        public HomePage(Form1 Form1)
         {
+            this.Form1 = Form1;
             InitializeComponent();
             InitializeWebView();
             InitializeFormProperties();
-            LoadUserConfig();
         }
 
         private async void InitializeWebView()
@@ -37,7 +37,7 @@ namespace LivelyWall
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.AllowDrop = true;
-            this.notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+            //this.notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             this.DragOver += DragArea_DragOver;
             this.FormClosing += new FormClosingEventHandler(this.Prevent_FormClosing);
 
@@ -74,14 +74,15 @@ namespace LivelyWall
                             MessageBox.Show("File Not found","Error");
                             return;
                         }
-                        Form1 = new Form1(filepath, playback);
-                        Form1.Show();
+                        Form1.UpdateValues(filepath, playback);
+                        Controller.Controller.Instance.SetVideo();
                         SendEventToWebView("SetButton", "Success");
                         configManager.SaveConfig(this.filepath);
-                        break;
+                    break;
 
                     case (int)Messages.StopBtnClick:
-                        Form1?.Close();
+                        Form1?.StopVideo();
+                        Form1?.Hide();
                         this.filepath = null;
                         SendEventToWebView("StopButton", "Success");
                     break;
@@ -109,21 +110,6 @@ namespace LivelyWall
                 string script = $"successEvent('{data}','{type}');";
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
-        }
-
-        private void LoadUserConfig()
-        {
-            UserConfig config = configManager.LoadConfig();
-            if (config.Paths.Count != 0)
-            {
-                Random rnd = new Random();
-                int index = rnd.Next(0, config.Paths.Count);
-                filepath = config.Paths[index];
-                Form1 = new Form1(filepath, playback);
-                Form1.Show();
-                SendEventToWebView("SetButton", "Success");
-            }
-
         }
 
         private void DragArea_DragOver(object sender, DragEventArgs e)
@@ -173,6 +159,7 @@ namespace LivelyWall
             SetBtnClick = 222,
             StopBtnClick= 333
         }
+
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CodeCleanUp();
@@ -182,6 +169,7 @@ namespace LivelyWall
         private void CodeCleanUp()
         {
             Form1?.Close();
+            Form1.Dispose();
         }
 
     }
