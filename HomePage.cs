@@ -37,8 +37,6 @@ namespace LivelyWall
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.AllowDrop = true;
-            //this.notifyIcon1.ContextMenuStrip = contextMenuStrip1;
-            this.DragOver += DragArea_DragOver;
             this.FormClosing += new FormClosingEventHandler(this.Prevent_FormClosing);
 
         }
@@ -107,39 +105,18 @@ namespace LivelyWall
         {
             if (webView1 != null && webView1.CoreWebView2 != null)
             {
-                string script = $"successEvent('{data}','{type}');";
+                string script = $"handleEvent('{data}','{type}');";
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
 
-        private void DragArea_DragOver(object sender, DragEventArgs e)
+        private async void SendStateToWebView(string data)
         {
-            // Check if the data format is FileDrop
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (webView1 != null && webView1.CoreWebView2 != null)
             {
-                e.Data.GetDataPresent(DataFormats.FileDrop).GetType();
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                this.filepath = files[0];
-                return;
-            }
-        }
-
-        private void NotifyIcon1_MouseClick(object sender, MouseEventArgs e)
-        {
-
-            if (e.Button == MouseButtons.Left)
-            {
-                // Toggle the visibility of the form
-                if (WindowState == FormWindowState.Minimized)
-                {
-                    Show();
-                    WindowState = FormWindowState.Normal;
-                }
-                else
-                {
-                    WindowState = FormWindowState.Minimized;
-                    Hide();
-                }
+                string encodedString = Encoder.Encoder.EncodeTo64(data);
+                string script = $"recieveDataFromForm('{encodedString}');";
+                await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
 
@@ -153,7 +130,7 @@ namespace LivelyWall
             }
         }
 
-        enum Messages
+        private enum Messages
         {
             SelectBtnClick = 111,
             SetBtnClick = 222,

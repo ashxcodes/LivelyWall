@@ -37,15 +37,33 @@ namespace LivelyWall.GetWorkerW
         }
         public void SetVideo(IntPtr handle)
         {
-            if (result != IntPtr.Zero && handle!= IntPtr.Zero)
+            if (result != IntPtr.Zero && handle != IntPtr.Zero)
             {
-                SetParent(handle, result);
+                // Try to set the parent of the handle
+                IntPtr oldParent = SetParent(handle, result);
+
+                if (oldParent == IntPtr.Zero)
+                {
+                    // If SetParent fails, display the error
+                    int errorCode = Marshal.GetLastWin32Error();
+                    MessageBox.Show($"SetParent failed with error code: {errorCode}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
+                // Display an error message if the handles are not valid
                 MessageBox.Show("Unable to find the desktop worker window. The application will now exit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                Application.Exit(); // Optionally, exit the application if handles are invalid
             }
+            //if (result != IntPtr.Zero && handle!= IntPtr.Zero)
+            //{
+            //    SetParent(handle, result);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Unable to find the desktop worker window. The application will now exit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            //}
         }
         private void FindTheWorkerW()
         {
@@ -63,13 +81,6 @@ namespace LivelyWall.GetWorkerW
                 }
                 return true;
             }, IntPtr.Zero);
-        }
-        private void DetachAndRestore(IntPtr handle)
-        {
-            if (result != IntPtr.Zero)
-            {
-                SetParent(handle, FindWindow("Progman", null));
-            }
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]

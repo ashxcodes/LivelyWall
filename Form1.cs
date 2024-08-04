@@ -22,16 +22,7 @@ namespace LivelyWall
             InitializeMediaPlayer();
             InitializeTimer();
         }
-        //protected override void OnLoad(EventArgs e)
-        //{
-        //    if (filePath != null && filePath != "")
-        //    {
-        //        base.OnLoad(e);
-        //        //FindTheWindowAndReparent();
-        //        InitializeMediaPlayer();
-        //        InitializeTimer();
-        //    }
-        //}
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
@@ -43,7 +34,8 @@ namespace LivelyWall
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.Opacity = 1;
-            this.Size = this.screenDetails.Dimensions();
+            Size scn = this.screenDetails.Dimensions();
+            this.Size = new Size(scn.Width,scn.Height);
             this.Location = new Point(this.screenDetails.PrimaryScreen().Bounds.Left, this.screenDetails.PrimaryScreen().Bounds.Top);
         }
 
