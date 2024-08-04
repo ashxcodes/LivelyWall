@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using LivelyWall.GetWorkerW;
 
@@ -45,7 +46,10 @@ namespace LivelyWall.Controller
         {
             if (homePage == null)
             {
-                homePage = new HomePage(Form1);
+                homePage = new HomePage(Form1)
+                {
+                    WindowState = FormWindowState.Minimized
+                };
             }
             if (homePage.WindowState == FormWindowState.Minimized)
             {
@@ -60,7 +64,8 @@ namespace LivelyWall.Controller
         }
         public void SetDefaultWallpaper()
         {
-            WorkerW.SetDefaultWallpaper("C:/Windows/Web/Wallpaper/Windows/img0.jpg");
+            string defaultWallpaper = Path.Combine(Application.StartupPath,"FrontEnd" , "DefaultWallpaper.jpg");
+            WorkerW.SetDefaultWallpaper(defaultWallpaper);
         }
         private void LoadUserConfig()
         {
