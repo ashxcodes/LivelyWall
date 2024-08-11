@@ -1,6 +1,7 @@
 using System.IO;
 using System;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace LivelyWall
 {
@@ -69,19 +70,22 @@ namespace LivelyWall
                     case (int)Messages.SetBtnClick:
                         if (filepath == null || filepath == "")
                         {
-                            MessageBox.Show("File Not found","Error");
+                            MessageBox.Show("Please Select a file","Error");
                             return;
                         }
                         Form1.UpdateValues(filepath, playback);
                         Controller.Controller.Instance.SetVideo();
                         SendEventToWebView("SetButton", "Success");
-                        configManager.SaveConfig(this.filepath);
+                        WallpaperDetails details = new WallpaperDetails()
+                        {
+                            FilePath = this.filepath,
+                            PlaybackSpeed = this.playback,
+                        };
+                        configManager.SaveConfig(details);
                     break;
 
                     case (int)Messages.StopBtnClick:
-                        Form1?.StopVideo();
-                        Form1?.Hide();
-                        this.filepath = null;
+                        Form1?.PauseVideo();
                         SendEventToWebView("StopButton", "Success");
                     break;
                         
@@ -110,12 +114,17 @@ namespace LivelyWall
             }
         }
 
-        private async void SendStateToWebView(string data)
+        public async void SendStateToWebView(WallpaperDetails details)
         {
             if (webView1 != null && webView1.CoreWebView2 != null)
             {
-                string encodedString = Encoder.Encoder.EncodeTo64(data);
-                string script = $"recieveDataFromForm('{encodedString}');";
+                WallpaperDetails _details = new WallpaperDetails()
+                {
+                    FilePath = Encoder.Encoder.EncodeTo64(details.FilePath),
+                    PlaybackSpeed = details.PlaybackSpeed,
+                };
+                var JSON = JsonConvert.SerializeObject(_details);
+                string script = $"setInitialState('{JSON}');";
                 await webView1.CoreWebView2.ExecuteScriptAsync(script);
             }
         }
@@ -134,19 +143,13 @@ namespace LivelyWall
         {
             SelectBtnClick = 111,
             SetBtnClick = 222,
-            StopBtnClick= 333
+            StopBtnClick = 333
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CodeCleanUp();
-            Application.Exit();
-        }
-
-        private void CodeCleanUp()
-        {
-            Form1?.Close();
-            Form1.Dispose();
+            Controller.Controller.Instance.DisposeForms();
+           Application.Exit();
         }
 
     }

@@ -22,7 +22,7 @@ namespace LivelyWall.GetWorkerW
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
 

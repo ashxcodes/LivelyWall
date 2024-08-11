@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System;
 
 namespace LivelyWall
@@ -9,13 +8,11 @@ namespace LivelyWall
     {
         private readonly ScreenDetails screenDetails;
         private System.Windows.Forms.Timer timer;
-        private string filePath;
-        private double playbackspeed;
+        private WallpaperDetails Details;
 
-        public Form1(string filePath, double playbackspeed = 1.0)
+        public Form1(WallpaperDetails _Details)
         {
-            this.filePath = filePath;
-            this.playbackspeed = playbackspeed;
+            Details = _Details;
             this.screenDetails = new ScreenDetails();
             InitializeComponent();
             InitializeTransparentFormProperties();
@@ -27,7 +24,6 @@ namespace LivelyWall
         {
             base.OnFormClosing(e);
             timer.Stop();
-            axWindowsMediaPlayer1.close();
         }
 
         private void InitializeTransparentFormProperties()
@@ -41,20 +37,25 @@ namespace LivelyWall
 
         private void InitializeMediaPlayer()
         {
-            axWindowsMediaPlayer1.Size = this.Size;
-            axWindowsMediaPlayer1.uiMode = "none"; // Hide the player controls
-            axWindowsMediaPlayer1.URL = filePath; // Path to your video file
-            axWindowsMediaPlayer1.settings.autoStart = true; // Start playing automatically
-            axWindowsMediaPlayer1.stretchToFit = true;
-            axWindowsMediaPlayer1.settings.rate = this.playbackspeed;
-            axWindowsMediaPlayer1.settings.setMode("loop", true);
+            vlcControl1.Parent = this;
+            vlcControl1.Size = this.Size;
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
-            if (axWindowsMediaPlayer1.Ctlcontrols.currentItem != null && axWindowsMediaPlayer1.Ctlcontrols.currentPosition > axWindowsMediaPlayer1.Ctlcontrols.currentItem.duration - 0.01)
+            if (vlcControl1.IsPlaying && vlcControl1.Length > 0)
             {
-                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = 0;
+                long currentTime = vlcControl1.Time; // in milliseconds
+                TimeSpan duration = vlcControl1.GetCurrentMedia().Duration;
+
+                // Convert duration to milliseconds for comparison
+                double totalDurationInMilliseconds = duration.TotalMilliseconds;
+
+                // If we're close to the end of the video, restart it
+                if (currentTime >= totalDurationInMilliseconds - 1000) // 1 second before end
+                {
+                    StartVideo();
+                }
             }
         }
 
@@ -62,7 +63,7 @@ namespace LivelyWall
         {
             timer = new System.Windows.Forms.Timer();
             timer.Start();
-            timer.Tick += timer1_Tick;
+            timer.Tick += Timer1_Tick;
         }
 
         private void NotifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -76,20 +77,21 @@ namespace LivelyWall
 
         public void UpdateValues(string filepath, double playback)
         {
-            this.filePath = filepath;
-            this.playbackspeed = playback;
+            Details.FilePath = filepath;
+            Details.PlaybackSpeed = playback;
         }
 
-        public void StopVideo()
+        public void PauseVideo()
         {
             timer.Stop();
-            axWindowsMediaPlayer1.close();
+            vlcControl1.Pause();
         }
 
         public void StartVideo()
         {
-            timer.Start();
-            axWindowsMediaPlayer1.URL = this.filePath;
+            timer.Start(); 
+            vlcControl1.Play(new Uri(Details.FilePath));
+            vlcControl1.Rate = (float)Details.PlaybackSpeed;
         }
 
         private void ExitButton_Click(object sender, EventArgs e)

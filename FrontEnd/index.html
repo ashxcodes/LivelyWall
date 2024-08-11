@@ -10,11 +10,10 @@
 </head>
 <body>
     <h1>Welcome to Lively Wall</h1>
-    <div class="placeholder-text center">Select a Live Wallpaper
     </div>
     <div id="dropArea" ondrop="handleDrop(event)" ondragover="allowDrop(event)" onclick="selectButtonClick()">
         <span class="dropArea">
-            Drag/Drop files or Click
+            Click to Select a LiveWallPaper
         </span>
     </div>
     <div id="snackbar"></div>
@@ -25,7 +24,7 @@
     </div>
     <div class="buttonContainer center">
         <button class="button" onclick="setButtonClick()" id="setbutton">Set Wallpaper</button>
-        <button class="button" onclick="stopButtonClick()" id="stopbutton">Stop Wallpaper</button>
+        <button class="button" onclick="pauseButtonClick()" id="stopbutton">Stop Wallpaper</button>
     </div>
 </body>
 </html>

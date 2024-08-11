@@ -5,14 +5,20 @@ using Newtonsoft.Json;
 
 namespace LivelyWall
 {
+    public class WallpaperDetails
+    {
+        public string FilePath { get; set; } = string.Empty;
+        public double PlaybackSpeed { get; set; } = 1.0;
+    }
+
     public class UserConfig
     {
         private static UserConfig instance;
-        public List<string> Paths { get; set; }
+        public List<WallpaperDetails> WallPaperDetails { get; set; }
 
         private UserConfig()
         {
-            Paths = new List<string>();
+            WallPaperDetails = new List<WallpaperDetails>();
         }
 
         public static UserConfig Instance
@@ -44,13 +50,13 @@ namespace LivelyWall
             filePath = Path.Combine(directoryPath, "user_config.json");
         }
 
-        public void SaveConfig(string newPath)
+        public void SaveConfig(WallpaperDetails details)
         {
             UserConfig config = LoadConfig();
 
-            if (!config.Paths.Contains(newPath))
+            if (!config.WallPaperDetails.Exists(w => w.FilePath == details.FilePath))
             {
-                config.Paths.Add(newPath);
+                config.WallPaperDetails.Add(details);
                 string json = JsonConvert.SerializeObject(config, Formatting.Indented);
                 File.WriteAllText(filePath, json);
             }
