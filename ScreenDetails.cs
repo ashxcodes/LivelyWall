@@ -52,7 +52,7 @@ namespace LivelyWall
         {
             return Screen.AllScreens;
         }
-        public  Size Dimensions()
+        public Size Dimensions()
         {
             Screen PrimaryScreen = this.PrimaryScreen();
             int widthWithoutTaskbar = PrimaryScreen.Bounds.Width;

@@ -11,7 +11,7 @@ async function setButtonClick() {
 }
 
 function stopButtonClick() {
-    showSnackbar("LiveWallpaper stopped","success");
+    showSnackbar("LiveWallpaper Stopped","success");
     window.chrome.webview.postMessage(STOP_ACTION);
 }
 
@@ -65,7 +65,14 @@ function populateTextField(file) {
     textField.value = file.name;
 }
 
-function successEvent(btnName, event) {
+function setInitialState(WallPaperDetails) {
+    let details = JSON.parse(WallPaperDetails)
+    document.getElementById("textField").value = atob(details.FilePath);
+    document.getElementById("speedField").value = details.PlaybackSpeed;
+    handleEvent("setbutton", "success");
+}
+
+function handleEvent(btnName, event) {
     const buttonName = btnName.toLowerCase();
     const eventName = event.toLowerCase();
 

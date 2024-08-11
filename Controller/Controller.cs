@@ -29,12 +29,28 @@ namespace LivelyWall.Controller
         private Form1 Form1{ get; set; }
         private HomePage homePage {  get; set; }
         private GetWorker WorkerW { get; set; }
+        private WallpaperDetails Details { get; set; } = new WallpaperDetails();
+        private UserConfig UserConfig { get; set; }
 
         public Controller() 
         {
             WorkerW = new GetWorker();
-            Form1 = new Form1("", 1);
-            LoadUserConfig();
+            Form1 = new Form1(Details);
+            homePage = new HomePage(Form1);
+            if (HasUserConfig())
+            {
+                Details = GetWallPaper();
+                Form1.UpdateValues(Details.FilePath, Details.PlaybackSpeed);
+                homePage.WindowState = FormWindowState.Minimized;
+                homePage.Show();
+                homePage.Hide();
+                SetVideo();
+            }
+            else
+            {
+                homePage.WindowState = FormWindowState.Normal;
+                homePage.Show();
+            }
         }
         public void SetVideo()
         {
@@ -50,10 +66,13 @@ namespace LivelyWall.Controller
                 {
                     WindowState = FormWindowState.Minimized
                 };
+                homePage.Show();
+                homePage.SendStateToWebView(Details);
             }
             if (homePage.WindowState == FormWindowState.Minimized)
             {
                 homePage.Show();
+                homePage.SendStateToWebView(Details);
                 homePage.WindowState = FormWindowState.Normal;
             }
             else
@@ -67,21 +86,30 @@ namespace LivelyWall.Controller
             string defaultWallpaper = Path.Combine(Application.StartupPath,"FrontEnd" , "DefaultWallpaper.jpg");
             WorkerW.SetDefaultWallpaper(defaultWallpaper);
         }
-        private void LoadUserConfig()
+        private WallpaperDetails GetWallPaper()
         {
-            UserConfig config = configManager.LoadConfig();
-            if (config.Paths.Count != 0)
-            {
-                Random rnd = new Random();
-                int index = rnd.Next(0, config.Paths.Count);
-                string filepath = config.Paths[index];
-                Form1.UpdateValues(filepath, 1);
-                SetVideo();
-            } else
-            {
-                homePage = new HomePage(Form1);
-            }
 
+            Random rnd = new Random();
+            int index = rnd.Next(0, UserConfig.WallPaperDetails.Count);
+            return UserConfig.WallPaperDetails[index];
+        }
+
+        private bool HasUserConfig()
+        {
+            UserConfig = configManager.LoadConfig();
+            if (UserConfig.WallPaperDetails.Count != 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void DisposeForms()
+        {
+            Form1?.Close();
+            Form1?.Dispose();
+            homePage?.Close();
+            homePage?.Dispose();
         }
     }
 }
