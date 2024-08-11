@@ -55,15 +55,6 @@ namespace LivelyWall.GetWorkerW
                 MessageBox.Show("Unable to find the desktop worker window. The application will now exit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit(); // Optionally, exit the application if handles are invalid
             }
-            //if (result != IntPtr.Zero && handle!= IntPtr.Zero)
-            //{
-            //    SetParent(handle, result);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Unable to find the desktop worker window. The application will now exit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            //}
         }
         private void FindTheWorkerW()
         {
