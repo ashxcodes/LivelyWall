@@ -29,16 +29,15 @@ namespace LivelyWall
         private void InitializeTransparentFormProperties()
         {
             this.FormBorderStyle = FormBorderStyle.None;
-            this.Opacity = 1;
-            Size scn = this.screenDetails.Dimensions();
-            this.Size = new Size(scn.Width,scn.Height);
+            this.Size = Screen.PrimaryScreen.WorkingArea.Size;
             this.Location = new Point(this.screenDetails.PrimaryScreen().Bounds.Left, this.screenDetails.PrimaryScreen().Bounds.Top);
         }
 
         private void InitializeMediaPlayer()
         {
             vlcControl1.Parent = this;
-            vlcControl1.Size = this.Size;
+            vlcControl1.Size = this.screenDetails.Dimensions();
+            vlcControl1.Location = new Point(0, 0);
         }
 
         private void Timer1_Tick(object sender, EventArgs e)

@@ -78,8 +78,9 @@
             // 
             this.vlcControl1.BackColor = System.Drawing.Color.Black;
             this.vlcControl1.Location = new System.Drawing.Point(-1, 0);
+            this.vlcControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.vlcControl1.Name = "vlcControl1";
-            this.vlcControl1.Size = new System.Drawing.Size(599, 354);
+            this.vlcControl1.Size = new System.Drawing.Size(479, 283);
             this.vlcControl1.Spu = -1;
             this.vlcControl1.TabIndex = 1;
             this.vlcControl1.Text = "vlcControl1";
@@ -90,6 +91,7 @@
             // 
             this.axWindowsMediaPlayer1.Enabled = true;
             this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(517, 325);
+            this.axWindowsMediaPlayer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
             this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
             this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(75, 23);
@@ -98,8 +100,10 @@
             // 
             // Form1
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(600, 366);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(480, 293);
             this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.vlcControl1);
             this.ForeColor = System.Drawing.SystemColors.Control;

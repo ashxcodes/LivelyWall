@@ -85,6 +85,7 @@ namespace LivelyWall
                     break;
 
                     case (int)Messages.StopBtnClick:
+                        Form1?.UpdateValues("", playback);
                         Form1?.PauseVideo();
                         SendEventToWebView("StopButton", "Success");
                     break;

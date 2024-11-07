@@ -39,7 +39,7 @@ namespace LivelyWall.Controller
             homePage = new HomePage(Form1);
             if (HasUserConfig())
             {
-                Details = GetWallPaper();
+                WallpaperDetails Details = GetWallPaper();
                 Form1.UpdateValues(Details.FilePath, Details.PlaybackSpeed);
                 homePage.WindowState = FormWindowState.Minimized;
                 homePage.Show();
@@ -50,6 +50,7 @@ namespace LivelyWall.Controller
             {
                 homePage.WindowState = FormWindowState.Normal;
                 homePage.Show();
+                homePage.Focus();
             }
         }
         public void SetVideo()
