@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LivelyWall")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CureMD")]
+[assembly: AssemblyCompany("LivelyWall")]
 [assembly: AssemblyProduct("LivelyWall")]
-[assembly: AssemblyCopyright("Copyright © CureMD 2024")]
+[assembly: AssemblyCopyright("Copyright © LivelyWall 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
